@@ -13,3 +13,6 @@
 
 # App binary
 dist
+
+# .env
+.env
