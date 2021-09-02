@@ -101,19 +101,6 @@ func TestInvalidConfigFile(t *testing.T) {
 	assert.NotNil(t, err)
 }
 
-func TestInvalidEnvVar(t *testing.T) {
-
-	setup(validFileName)
-
-	// override envPath with invalid path
-	os.Setenv(envPath, "{teste}}")
-
-	_, err := Default()
-
-	assert.NotNil(t, err)
-
-}
-
 func setup(fileName string) {
 
 	cleanup()
