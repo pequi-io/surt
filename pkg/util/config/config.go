@@ -1,14 +1,15 @@
 package config
 
 import (
+	"github.com/mcuadros/go-defaults"
 	"github.com/spf13/viper"
 )
 
 // File defines some properties of config file
 type File struct {
-	Name      string
-	Extension string
-	Path      string
+	Name      string `default:"config"`
+	Extension string `default:"yaml"`
+	Path      string `default:"$HOME/.surt"`
 	Config    Config
 }
 
@@ -20,49 +21,66 @@ type Config struct {
 
 // API config
 type API struct {
-	Host string
-	Port string
+	Port string `default:"8080"`
 }
 
 // Global Log config
 type Log struct {
-	Debug  bool
-	Pretty bool
+	Debug  bool `default:"false"`
+	Pretty bool `default:"false"`
 }
 
-// NewConfigFileDefault creates new File struct with Config default values
-// viper doesn't support default values in struct: https://github.com/spf13/viper/issues/295
-func NewConfigFileDefault(name string, extension string, path string) File {
-	return File{
-		Name:      name,
-		Extension: extension,
-		Path:      path,
-		Config: Config{
-			API: API{
-				Host: "0.0.0.0",
-				Port: "8080",
-			},
-			Log: Log{
-				Debug:  false, // default: info
-				Pretty: false, // default: json
-			},
-		},
+// Environment variable prefix
+var surtEnvPrefix = "surt_cfg"
+
+// Return default File with default config
+func Default() (*File, error) {
+
+	// New file using default values
+	f := new(File)
+	defaults.SetDefaults(f)
+
+	v := viper.New()
+
+	// load environment variables
+	// finding for env vars: SURT_CFG_NAME, SURT_CFG_PATH and SURT_CFG_EXTENSION
+	v.AutomaticEnv()
+	v.SetEnvPrefix(surtEnvPrefix)
+
+	// We must specify the env vars that we want to use in unmarshals using `BindEnv` based on the following issue:
+	// https://github.com/spf13/viper/issues/188
+	v.BindEnv("name")
+	v.BindEnv("path")
+
+	// viper.Unmarshal unmarshals into a f struct
+	err := v.Unmarshal(&f)
+	if err != nil {
+		return f, err
 	}
+
+	return f, nil
 }
 
 func (f *File) LoadConfig() error {
 
-	viper.SetConfigName(f.Name)
-	viper.SetConfigType(f.Extension)
-	viper.AddConfigPath(f.Path + "/")
+	v := viper.New()
+
+	v.SetConfigName(f.Name)
+	v.SetConfigType(f.Extension)
+	v.AddConfigPath(f.Path + "/")
 
 	// load configuration file
-	if err := viper.ReadInConfig(); err != nil {
+	if err := v.ReadInConfig(); err != nil {
 		return err
 	}
 
-	// viper.Unmarshal unmarshals the config into a &f.Config Struct
-	err := viper.Unmarshal(&f.Config)
+	// load environment variables
+	v.AutomaticEnv()
+	v.SetEnvPrefix(surtEnvPrefix)
+
+	// viper.Unmarshal unmarshals the config into a &f.Config struct
+	err := v.Unmarshal(&f.Config)
+
 	if err != nil {
 		return err
 	}

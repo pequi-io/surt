@@ -8,14 +8,17 @@ import (
 
 func RunApp() {
 
-	// define log with log default
+	// define log with new logger default
 	log := logger.NewDefault()
 
 	// create cfg with default values
-	cfg := config.NewConfigFileDefault("config", "yaml", "$HOME/.surt")
+	cfg, err := config.Default()
+	if err != nil {
+		log.Error().Err(err)
+	}
 
 	// load values from config file
-	err := cfg.LoadConfig()
+	err = cfg.LoadConfig()
 	if err != nil {
 		log.Error().Err(err)
 	}
