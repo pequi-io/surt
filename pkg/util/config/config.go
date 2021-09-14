@@ -15,8 +15,9 @@ type File struct {
 
 // Global config
 type Config struct {
-	API API
-	Log Log
+	API       API
+	Log       Log
+	Antivirus Antivirus
 }
 
 // API config
@@ -28,6 +29,12 @@ type API struct {
 type Log struct {
 	Debug  bool `default:"false"`
 	Pretty bool `default:"false"`
+}
+
+type Antivirus struct {
+	Engine  string `default:"clamav"`
+	Address string `default:"127.0.0.1:3310"`
+	Network string `default:"tcp"`
 }
 
 // Environment variable prefix

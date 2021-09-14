@@ -1,17 +1,11 @@
 package main
 
 import (
-	"os"
-
 	"github.com/surt-io/surt/cmd/surt-task-runner/app"
 )
 
 func main() {
 
-	err := app.RunApp()
-
-	if err != nil {
-		os.Exit(1)
-	}
+	app.RunApp()
 
 }
