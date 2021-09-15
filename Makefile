@@ -29,6 +29,17 @@ build:
 	@echo "> Bulding all binaries..."
 	goreleaser release --snapshot --skip-publish --rm-dist
 
+clamav-start:
+	@echo "> Starting local clamav using docker..."
+	docker run -d -p 3310:3310 --rm --name clamav ghcr.io/surt-io/container-clamav:latest-initdb
+
+clamav-stop:
+	@echo "> Stopping local clamav..."
+	docker stop clamav
+
+clamav-remove:
+	@echo "> Removing local clamav container..."
+	docker rm -v -f clamav
 
 all: install mods verify lint test build
 
