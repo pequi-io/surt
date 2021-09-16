@@ -5,9 +5,9 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/surt-io/surt/internal/util"
 	"github.com/surt-io/surt/pkg/object"
 	"github.com/surt-io/surt/pkg/storage/services/fake"
-	"github.com/surt-io/surt/pkg/util/helper"
 )
 
 var (
@@ -16,18 +16,16 @@ var (
 		"SURT_SCAN_STATUS": "CLEAN",
 	}
 	obj = object.Object{
-		Path: "/tmp/myobject.zip",
-		Tags: objTags,
+		RawPath: "/tmp/myobject.zip",
+		Tags:    objTags,
 	}
 	objWithoutPath = object.Object{
-		Name: "empty path",
-		Path: "",
-		Tags: map[string]string{},
+		RawPath: "",
+		Tags:    map[string]string{},
 	}
-	// fake storage service returns error when path value is "fail".
 	objToFail = object.Object{
-		Path: "fail",
-		Tags: objTags,
+		RawPath: "fail",
+		Tags:    objTags,
 	}
 )
 
@@ -38,7 +36,7 @@ func TestGetObject(t *testing.T) {
 
 	body, err := s.GetObject(&obj)
 	assert.Nil(t, err)
-	assert.Equal(t, "fake", helper.ByteToString(body), "object content/body should be equal")
+	assert.Equal(t, "fake", util.ByteToString(body), "object content/body should be equal")
 
 	_, err = s.GetObject(&objWithoutPath)
 	assert.NotNil(t, err)

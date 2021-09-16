@@ -10,11 +10,9 @@ import (
 
 var (
 	obj = object.Object{
-		Name:    "fakeobj",
 		Content: []byte("fake"),
 	}
 	emptyContent = object.Object{
-		Name:    "emptyobj",
 		Content: make([]byte, 0, 1),
 	}
 )

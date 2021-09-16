@@ -1,20 +1,29 @@
 package app
 
 import (
+	"fmt"
+	"sync"
+
+	"github.com/surt-io/surt/internal/config"
+	"github.com/surt-io/surt/internal/healthz"
+	"github.com/surt-io/surt/internal/logger"
 	"github.com/surt-io/surt/pkg/antivirus"
 	"github.com/surt-io/surt/pkg/antivirus/engine/clamav"
 	"github.com/surt-io/surt/pkg/object"
-	"github.com/surt-io/surt/pkg/util/config"
-	"github.com/surt-io/surt/pkg/util/logger"
 )
 
-func RunApp() {
+// define log with new logger
+var log = logger.New()
 
-	// define log with new logger default
-	log := logger.NewDefault()
+// create cfg config.File type
+var cfg *config.File
+
+func init() {
+
+	var err error
 
 	// create cfg with default values
-	cfg, err := config.Default()
+	cfg, err = config.Default()
 	if err != nil {
 		log.Error().Err(err)
 	}
@@ -25,8 +34,39 @@ func RunApp() {
 		log.Error().Err(err)
 	}
 
-	// update logger with global log config values
-	log = logger.New(cfg.Config.Log.Debug, cfg.Config.Log.Debug)
+}
+
+func RunApp() {
+
+	wg := new(sync.WaitGroup)
+	wg.Add(1)
+
+	go func() {
+		RunTaskRunner()
+		wg.Done()
+	}()
+
+	go func(p string) {
+		RunHealthz(p)
+		wg.Done()
+	}(cfg.Config.API.Port)
+
+	wg.Wait()
+}
+
+func RunHealthz(port string) (err error) {
+	h := healthz.New()
+	log.Info().Msg("starting healthcheck...")
+	err = h.Run(":" + port)
+
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func RunTaskRunner() (err error) {
 
 	// declare empty antivirus struct
 	var av antivirus.Antivirus
@@ -37,17 +77,21 @@ func RunApp() {
 		engine, err := clamav.New(cfg.Config.Antivirus.Network, cfg.Config.Antivirus.Address)
 		if err != nil {
 			log.Error().Err(err)
+			return err
 		}
 		av = *antivirus.New(engine)
 
 	default:
-		log.Error().Msgf("antivirus %s engine is not supported", cfg.Config.Antivirus.Engine)
+		err = fmt.Errorf("antivirus %s engine is not supported", cfg.Config.Antivirus.Engine)
+		log.Error().Err(err)
+		return
 	}
 
 	// test check av engine health status
 	hc, err := av.GetHealthStatus()
 	if err != nil {
 		log.Error().Err(err)
+		return
 	}
 
 	log.Info().Msgf("health check result for %s - %s: %s", cfg.Config.Antivirus.Engine, cfg.Config.Antivirus.Address, hc)
@@ -60,7 +104,10 @@ func RunApp() {
 	r, err := av.Scan(&obj)
 	if err != nil {
 		log.Error().Err(err)
+		return
 	}
 
 	log.Info().Msgf("scan result of test eicar string: %s", r)
+
+	return nil
 }
