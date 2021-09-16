@@ -5,14 +5,14 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/surt-io/surt/pkg/antivirus/engine/fake"
-	"github.com/surt-io/surt/pkg/object"
+	"github.com/surt-io/surt/pkg/types"
 )
 
 var (
-	obj = object.Object{
+	obj = types.Object{
 		Content: []byte("fake"),
 	}
-	emptyContent = object.Object{
+	emptyContent = types.Object{
 		Content: make([]byte, 0, 1),
 	}
 )
@@ -24,7 +24,7 @@ func TestNewAV(t *testing.T) {
 
 	res, err := av.Scan(&obj)
 	assert.Nil(t, err)
-	assert.Equal(t, "CLEAN", res, "av scan result should be equal")
+	assert.Equal(t, "CLEAN", res[0].Status, "av scan result should be equal")
 
 	h, err := av.GetHealthStatus()
 	assert.Nil(t, err)

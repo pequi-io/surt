@@ -6,6 +6,7 @@ import (
 	"io"
 
 	"github.com/baruwa-enterprise/clamd"
+	"github.com/surt-io/surt/pkg/types"
 )
 
 type engine struct {
@@ -25,22 +26,29 @@ func New(network string, address string) (e *engine, err error) {
 	return
 }
 
-func (e *engine) Scan(i io.Reader) (result string, err error) {
+func (e *engine) Scan(i io.Reader) (result []types.Result, err error) {
 
-	resp, err := e.client.ScanReader(context.TODO(), i)
+	response, err := e.client.ScanReader(context.TODO(), i)
 
 	if err != nil {
-		return "", fmt.Errorf("ClamavClientScanReader: %w", err)
+		return result, fmt.Errorf("ClamavClientScanReader: %w", err)
 	}
 
-	if len(resp) == 0 {
-		return "", fmt.Errorf("ClamavClientScanReader: empty result for scan")
+	if len(response) == 0 {
+		return result, fmt.Errorf("ClamavClientScanReader: empty result for scan")
 	}
 
-	// get always first response
-	r := *resp[0]
+	for _, res := range response {
+		r := types.Result{}
+		r.FileName = res.Filename
+		r.Status = res.Status
+		r.Signature = res.Signature
+		r.Status = res.Status
 
-	return r.Status, nil
+		result = append(result, r)
+	}
+
+	return result, nil
 }
 
 func (e *engine) GetHealthStatus() (response string, err error) {

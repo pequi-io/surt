@@ -3,7 +3,7 @@ package storage
 import (
 	"fmt"
 
-	"github.com/surt-io/surt/pkg/object"
+	"github.com/surt-io/surt/pkg/types"
 )
 
 type StorageService interface {
@@ -24,7 +24,7 @@ func New(provider StorageService) *storage {
 }
 
 //GetObject returns storage service object content
-func (s *storage) GetObject(o *object.Object) ([]byte, error) {
+func (s *storage) GetObject(o *types.Object) ([]byte, error) {
 	var b []byte
 
 	if o.RawPath == "" {
@@ -39,7 +39,7 @@ func (s *storage) GetObject(o *object.Object) ([]byte, error) {
 }
 
 //GetObjectTags returns SURT tags from storage service object
-func (s *storage) GetObjectTags(o *object.Object) (map[string]string, error) {
+func (s *storage) GetObjectTags(o *types.Object) (map[string]string, error) {
 
 	t := map[string]string{}
 
@@ -55,7 +55,7 @@ func (s *storage) GetObjectTags(o *object.Object) (map[string]string, error) {
 }
 
 //SetObjectTags sets SURT tags to storage service object
-func (s *storage) SetObjectTags(o *object.Object) error {
+func (s *storage) SetObjectTags(o *types.Object) error {
 
 	if o.RawPath == "" {
 		return fmt.Errorf("object path is empty")

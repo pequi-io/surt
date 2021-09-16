@@ -9,7 +9,7 @@ import (
 	"github.com/surt-io/surt/internal/logger"
 	"github.com/surt-io/surt/pkg/antivirus"
 	"github.com/surt-io/surt/pkg/antivirus/engine/clamav"
-	"github.com/surt-io/surt/pkg/object"
+	"github.com/surt-io/surt/pkg/types"
 )
 
 // define log with new logger
@@ -97,8 +97,9 @@ func RunTaskRunner() (err error) {
 	log.Info().Msgf("health check result for %s - %s: %s", cfg.Config.Antivirus.Engine, cfg.Config.Antivirus.Address, hc)
 
 	// test antivirus scan
-	var obj object.Object
-	eicarSrt := "X5O!P%@AP[4\\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*"
+	var obj types.Object
+	eicarSrt := "clean"
+	//eicarSrt := "X5O!P%@AP[4\\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*"
 	obj.Content = []byte(eicarSrt)
 
 	r, err := av.Scan(&obj)
@@ -107,7 +108,7 @@ func RunTaskRunner() (err error) {
 		return
 	}
 
-	log.Info().Msgf("scan result of test eicar string: %s", r)
+	log.Info().Msgf("scan result of test eicar string: %v", r)
 
 	return nil
 }

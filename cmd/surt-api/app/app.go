@@ -32,6 +32,9 @@ func init() {
 
 func RunApp() {
 	log.Info().Msg("starting api server on port " + cfg.Config.API.Port)
-	r := api.New()
-	r.Run(":" + cfg.Config.API.Port)
+	s := api.New()
+	err := s.Run(":" + cfg.Config.API.Port)
+	if err != nil {
+		log.Fatal().Err(err)
+	}
 }

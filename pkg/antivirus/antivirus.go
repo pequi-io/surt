@@ -5,12 +5,11 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/surt-io/surt/internal/util"
-	"github.com/surt-io/surt/pkg/object"
+	"github.com/surt-io/surt/pkg/types"
 )
 
 type Engine interface {
-	Scan(io.Reader) (result string, err error)
+	Scan(io.Reader) (result []types.Result, err error)
 	GetHealthStatus() (response string, err error)
 }
 
@@ -26,13 +25,13 @@ func New(engine Engine) *Antivirus {
 }
 
 //Scan scans object content
-func (av *Antivirus) Scan(o *object.Object) (result string, err error) {
+func (av *Antivirus) Scan(o *types.Object) (result []types.Result, err error) {
 	r := bytes.NewReader(o.Content)
-	res, err := av.engine.Scan(r)
+	result, err = av.engine.Scan(r)
 	if err != nil {
-		return "", fmt.Errorf("Scan: %w", err)
+		return result, fmt.Errorf("Scan: %w", err)
 	}
-	return util.ParseScanStatus(res), nil
+	return result, nil
 }
 
 //GetHealthStatus returns healthcheck status from Antivirus Engine

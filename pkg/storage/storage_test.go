@@ -6,8 +6,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/surt-io/surt/internal/util"
-	"github.com/surt-io/surt/pkg/object"
 	"github.com/surt-io/surt/pkg/storage/services/fake"
+	"github.com/surt-io/surt/pkg/types"
 )
 
 var (
@@ -15,15 +15,15 @@ var (
 		"SURT_LAST_SCAN":   time.Now().String(),
 		"SURT_SCAN_STATUS": "CLEAN",
 	}
-	obj = object.Object{
+	obj = types.Object{
 		RawPath: "/tmp/myobject.zip",
 		Tags:    objTags,
 	}
-	objWithoutPath = object.Object{
+	objWithoutPath = types.Object{
 		RawPath: "",
 		Tags:    map[string]string{},
 	}
-	objToFail = object.Object{
+	objToFail = types.Object{
 		RawPath: "fail",
 		Tags:    objTags,
 	}
