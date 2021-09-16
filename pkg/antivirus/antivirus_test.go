@@ -39,6 +39,6 @@ func TestScanWithError(t *testing.T) {
 
 	res, err := av.Scan(&emptyContent)
 	assert.NotNil(t, err)
-	assert.Equal(t, "", res, "av scan result should be equal")
+	assert.Equal(t, []types.Result(nil), res, "av scan result should be equal")
 
 }
