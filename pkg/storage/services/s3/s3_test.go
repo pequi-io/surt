@@ -58,7 +58,7 @@ func TestGetObjectBody(t *testing.T) {
 			if err != nil {
 				t.Fatalf("expect no error, got %v", err)
 			}
-			if e, a := tt.expect, content; bytes.Compare(e, a) != 0 {
+			if e, a := tt.expect, content; !bytes.Equal(e, a) {
 				t.Errorf("expect %v, got %v", e, a)
 			}
 		})
