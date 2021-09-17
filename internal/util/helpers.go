@@ -1,11 +1,21 @@
 package util
 
-import "strings"
+import (
+	"crypto/sha256"
+	"strings"
+)
 
-var scanStatus = map[string]string{
-	"infected": "INFECTED",
-	"clean":    "CLEAN",
-	"unknown":  "UNKNOWN",
+// Antivirus scan result values
+var (
+	StrInfected = "INFECTED"
+	StrUnknown  = "UNKNOWN"
+	StrClean    = "CLEAN"
+)
+
+var ScanStatus = map[string]string{
+	"infected": StrInfected,
+	"clean":    StrClean,
+	"unknown":  StrClean,
 }
 
 func ParseScanStatus(s string) string {
@@ -14,17 +24,17 @@ func ParseScanStatus(s string) string {
 
 	switch s {
 	case "FOUND":
-		return scanStatus["infected"]
+		return ScanStatus["infected"]
 	case "INFECTED":
-		return scanStatus["infected"]
+		return ScanStatus["infected"]
 	case "NOT FOUND":
-		return scanStatus["clean"]
+		return ScanStatus["clean"]
 	case "OK":
-		return scanStatus["clean"]
+		return ScanStatus["clean"]
 	case "CLEAN":
-		return scanStatus["clean"]
+		return ScanStatus["clean"]
 	default:
-		return scanStatus["unknown"]
+		return ScanStatus["unknown"]
 	}
 }
 
@@ -34,4 +44,14 @@ func ByteToString(b []byte) string {
 
 func StringToByte(s string) []byte {
 	return []byte(s)
+}
+
+//GetHash returns sha256 hash of []byte
+func GetHash(c []byte) (hash string) {
+	h := sha256.New()
+	_, err := h.Write(c)
+	if err != nil {
+		return hash
+	}
+	return ByteToString(h.Sum(nil))
 }

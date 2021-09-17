@@ -6,12 +6,7 @@ import (
 	"github.com/surt-io/surt/pkg/types"
 )
 
-type StorageService interface {
-	GetObject(p string) (body []byte, err error)
-	GetObjectTags(p string) (tags map[string]string, err error)
-	SetObjectTags(p string, tags map[string]string) (err error)
-}
-
+//Storage interface
 type storage struct {
 	provider StorageService
 }
@@ -24,14 +19,15 @@ func New(provider StorageService) *storage {
 }
 
 //GetObject returns storage service object content
-func (s *storage) GetObject(o *types.Object) ([]byte, error) {
-	var b []byte
+func (s *storage) GetObject(o *types.Object) (b []byte, err error) {
 
-	if o.RawPath == "" {
-		return b, fmt.Errorf("object path is empty")
+	// Validate if RawFilePath is empty
+	if o.RawFilePath == "" {
+		return b, fmt.Errorf("GetObject: object RawFilePath is empty")
 	}
 
-	b, err := s.provider.GetObject(o.RawPath)
+	// Get object content from provider service
+	b, err = s.provider.GetObject(o.RawFilePath)
 	if err != nil {
 		return b, fmt.Errorf("GetObject: %w", err)
 	}
@@ -39,15 +35,15 @@ func (s *storage) GetObject(o *types.Object) ([]byte, error) {
 }
 
 //GetObjectTags returns SURT tags from storage service object
-func (s *storage) GetObjectTags(o *types.Object) (map[string]string, error) {
+func (s *storage) GetObjectTags(o *types.Object) (types.Tags, error) {
 
-	t := map[string]string{}
+	t := types.Tags{}
 
-	if o.RawPath == "" {
+	if o.RawFilePath == "" {
 		return t, fmt.Errorf("object path is empty")
 	}
 
-	t, err := s.provider.GetObjectTags(o.RawPath)
+	t, err := s.provider.GetObjectTags(o.RawFilePath)
 	if err != nil {
 		return t, fmt.Errorf("GetObjectTags: %w", err)
 	}
@@ -57,14 +53,14 @@ func (s *storage) GetObjectTags(o *types.Object) (map[string]string, error) {
 //SetObjectTags sets SURT tags to storage service object
 func (s *storage) SetObjectTags(o *types.Object) error {
 
-	if o.RawPath == "" {
+	if o.RawFilePath == "" {
 		return fmt.Errorf("object path is empty")
 	}
 	if len(o.Tags) == 0 {
 		return fmt.Errorf("object tags is empty")
 	}
 
-	err := s.provider.SetObjectTags(o.RawPath, o.Tags)
+	err := s.provider.SetObjectTags(o.RawFilePath, o.Tags)
 	if err != nil {
 		return fmt.Errorf("SetObjectTags: %w", err)
 	}

@@ -11,9 +11,11 @@ type Object struct {
 	Content     []byte
 	ContentHash string
 	SizeMb      float32
-	Tags        map[string]string
-	Scan        Scan
+	Tags        Tags
 }
+
+//Tags type
+type Tags map[string]string
 
 //Storage Object Key (SOK)
 type SOK struct {
@@ -22,12 +24,31 @@ type SOK struct {
 	Key            string
 }
 
+//NewObject creates new Object type
+func NewObject(rawFilePath string) (*Object, error) {
+	obj := Object{}
+	if rawFilePath == "" {
+		return &obj, ErrEmptyRawFilePath
+	}
+	obj.RawFilePath = rawFilePath
+	obj.SOK = GenerateSOK(rawFilePath)
+	return &obj, nil
+}
+
+func (o *Object) Validate() error {
+	if o.RawFilePath == "" {
+		return ErrEmptyRawFilePath
+	}
+	//ToDo: Add regex to validate rawFilePath string with SOK standard
+	return nil
+}
+
 //GenerateSOK converts RawFilePath string to SOK type
-func (o *Object) GenerateSOK() {
-	var s SOK
-	s.StorageService = strings.Split(o.RawFilePath, ":")[0]
-	tmpStr := string(strings.Split(o.RawFilePath, "//")[1])
+func GenerateSOK(rawFilePath string) SOK {
+	s := SOK{}
+	s.StorageService = strings.Split(rawFilePath, ":")[0]
+	tmpStr := string(strings.Split(rawFilePath, "//")[1])
 	s.BucketName = string(strings.SplitN(tmpStr, "/", 2)[0])
 	s.Key = string(strings.SplitN(tmpStr, "/", 2)[1])
-	o.SOK = s
+	return s
 }

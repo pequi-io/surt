@@ -22,7 +22,7 @@ func TestNewAV(t *testing.T) {
 	avengine := fake.New()
 	av := New(avengine)
 
-	res, err := av.Scan(&obj)
+	res, err := av.ScanObject(&obj)
 	assert.Nil(t, err)
 	assert.Equal(t, "CLEAN", res[0].Status, "av scan result should be equal")
 
@@ -37,7 +37,7 @@ func TestScanWithError(t *testing.T) {
 	avengine := fake.New()
 	av := New(avengine)
 
-	res, err := av.Scan(&emptyContent)
+	res, err := av.ScanObject(&emptyContent)
 	assert.NotNil(t, err)
 	assert.Equal(t, []types.Result(nil), res, "av scan result should be equal")
 

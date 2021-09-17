@@ -51,7 +51,7 @@ func (e *engine) Scan(i io.Reader) (result []types.Result, err error) {
 	return result, nil
 }
 
-func (e *engine) GetHealthStatus() (response string, err error) {
+func (e *engine) HealthStatus() (response string, err error) {
 	p, err := e.client.Ping(context.TODO())
 	if err != nil {
 		return "unhealthy", fmt.Errorf("ClamavClientHealthCheck: %w", err)

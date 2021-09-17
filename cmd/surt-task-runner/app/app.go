@@ -1,15 +1,13 @@
 package app
 
 import (
-	"fmt"
 	"sync"
 
 	"github.com/surt-io/surt/internal/config"
 	"github.com/surt-io/surt/internal/healthz"
 	"github.com/surt-io/surt/internal/logger"
-	"github.com/surt-io/surt/pkg/antivirus"
-	"github.com/surt-io/surt/pkg/antivirus/engine/clamav"
-	"github.com/surt-io/surt/pkg/types"
+	"github.com/surt-io/surt/pkg/repository"
+	"github.com/surt-io/surt/pkg/scan"
 )
 
 // define log with new logger
@@ -68,27 +66,18 @@ func RunHealthz(port string) (err error) {
 
 func RunTaskRunner() (err error) {
 
-	// declare empty antivirus struct
-	var av antivirus.Antivirus
+	repo := repository.NewScanDynamoDB("surt_scan")
+	svc := scan.NewService(repo)
 
-	// load antivirus engine
-	switch cfg.Config.Antivirus.Engine {
-	case "clamav":
-		engine, err := clamav.New(cfg.Config.Antivirus.Network, cfg.Config.Antivirus.Address)
-		if err != nil {
-			log.Error().Err(err)
-			return err
-		}
-		av = *antivirus.New(engine)
-
-	default:
-		err = fmt.Errorf("antivirus %s engine is not supported", cfg.Config.Antivirus.Engine)
+	// setup av engine
+	err = svc.SetupEngine(cfg.Config.Antivirus)
+	if err != nil {
 		log.Error().Err(err)
 		return
 	}
 
 	// test check av engine health status
-	hc, err := av.GetHealthStatus()
+	hc, err := svc.HealthCheck()
 	if err != nil {
 		log.Error().Err(err)
 		return
@@ -96,19 +85,32 @@ func RunTaskRunner() (err error) {
 
 	log.Info().Msgf("health check result for %s - %s: %s", cfg.Config.Antivirus.Engine, cfg.Config.Antivirus.Address, hc)
 
-	// test antivirus scan
-	var obj types.Object
-	eicarSrt := "clean"
-	//eicarSrt := "X5O!P%@AP[4\\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*"
-	obj.Content = []byte(eicarSrt)
-
-	r, err := av.Scan(&obj)
+	//create new scan
+	log.Info().Msg("creating new scan task")
+	scanId, err := svc.CreateScan("s3://mybucket/eicar.zip")
 	if err != nil {
-		log.Error().Err(err)
+		log.Err(err)
 		return
 	}
 
-	log.Info().Msgf("scan result of test eicar string: %v", r)
+	log.Info().Msgf("New ScanID: %v", scanId)
+
+	s, err := svc.GetScan(scanId)
+	if err != nil {
+		log.Err(err)
+		return
+	}
+
+	log.Info().Msgf("Get Scan: %v", s)
+
+	log.Info().Msg("Execute scan")
+	err = svc.ExecuteScan(s)
+	if err != nil {
+		log.Err(err)
+		return
+	}
+
+	log.Info().Msgf("Object infected: %v", s.Infected)
 
 	return nil
 }

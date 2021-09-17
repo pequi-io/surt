@@ -32,6 +32,6 @@ func (e *engine) Scan(i io.Reader) (result []types.Result, err error) {
 	return result, nil
 }
 
-func (e *engine) GetHealthStatus() (response string, err error) {
+func (e *engine) HealthStatus() (response string, err error) {
 	return "healthy", nil
 }

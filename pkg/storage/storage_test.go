@@ -16,16 +16,16 @@ var (
 		"SURT_SCAN_STATUS": "CLEAN",
 	}
 	obj = types.Object{
-		RawPath: "/tmp/myobject.zip",
-		Tags:    objTags,
+		RawFilePath: "/tmp/myobject.zip",
+		Tags:        objTags,
 	}
 	objWithoutPath = types.Object{
-		RawPath: "",
-		Tags:    map[string]string{},
+		RawFilePath: "",
+		Tags:        map[string]string{},
 	}
 	objToFail = types.Object{
-		RawPath: "fail",
-		Tags:    objTags,
+		RawFilePath: "fail",
+		Tags:        objTags,
 	}
 )
 
