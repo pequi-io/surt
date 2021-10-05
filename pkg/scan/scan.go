@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/surt-io/surt/internal/config"
-	"github.com/surt-io/surt/internal/util"
 	"github.com/surt-io/surt/pkg/antivirus"
 	"github.com/surt-io/surt/pkg/antivirus/engine/clamav"
-	"github.com/surt-io/surt/pkg/types"
+	"github.com/surt-io/surt/pkg/config"
+	"github.com/surt-io/surt/pkg/entity"
+	"github.com/surt-io/surt/pkg/util"
 )
 
 type Service struct {
@@ -38,23 +38,23 @@ func (s *Service) SetupEngine(cfg config.Antivirus) (err error) {
 
 }
 
-func (s *Service) CreateScan(rawFilePath string) (types.ID, error) {
-	n, err := types.NewScan(rawFilePath)
+func (s *Service) CreateScan(rawFilePath string) (entity.ID, error) {
+	n, err := entity.NewScan(rawFilePath)
 	if err != nil {
 		return n.ID, err
 	}
 	return s.repo.Create(n)
 }
 
-func (s *Service) UpdateScan(sc *types.Scan) (err error) {
+func (s *Service) UpdateScan(sc *entity.Scan) (err error) {
 	return s.repo.Update(sc)
 }
 
-func (s *Service) GetScan(id types.ID) (*types.Scan, error) {
+func (s *Service) GetScan(id entity.ID) (*entity.Scan, error) {
 	return s.repo.Get(id)
 }
 
-func (s *Service) ExecuteScan(sc *types.Scan) (err error) {
+func (s *Service) ExecuteScan(sc *entity.Scan) (err error) {
 
 	// Update Scan status
 	sc.StartedAt = time.Now()
@@ -63,6 +63,9 @@ func (s *Service) ExecuteScan(sc *types.Scan) (err error) {
 	if err != nil {
 		return err
 	}
+
+	// TO-DO
+	// retrieve object from storage service (GetObject)
 
 	// Execute Scan
 	r, err := s.av.ScanObject(&sc.Object)
@@ -83,9 +86,13 @@ func (s *Service) ExecuteScan(sc *types.Scan) (err error) {
 	}
 
 	err = s.UpdateScan(sc)
+
 	if err != nil {
 		return err
 	}
+
+	// TO-DO
+	// update object tags with scan result
 
 	return nil
 

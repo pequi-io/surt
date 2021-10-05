@@ -1,11 +1,11 @@
-package fake
+package mockengine
 
 import (
 	"bytes"
 	"fmt"
 	"io"
 
-	"github.com/surt-io/surt/pkg/types"
+	"github.com/surt-io/surt/pkg/entity"
 )
 
 type engine struct {
@@ -18,13 +18,13 @@ func New() *engine {
 	}
 }
 
-func (e *engine) Scan(i io.Reader) (result []types.Result, err error) {
+func (e *engine) Scan(i io.Reader) (result []entity.Result, err error) {
 	buf := new(bytes.Buffer)
 	buf.ReadFrom(i)
 	if buf.Len() == 0 {
 		return result, fmt.Errorf("empty content")
 	}
-	fakeResp := types.Result{
+	fakeResp := entity.Result{
 		FileName: "fake.zip",
 		Status:   "CLEAN",
 	}

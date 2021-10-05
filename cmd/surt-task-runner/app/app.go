@@ -1,11 +1,12 @@
 package app
 
 import (
+	"errors"
 	"sync"
 
-	"github.com/surt-io/surt/internal/config"
-	"github.com/surt-io/surt/internal/healthz"
-	"github.com/surt-io/surt/internal/logger"
+	"github.com/surt-io/surt/pkg/config"
+	"github.com/surt-io/surt/pkg/healthz"
+	"github.com/surt-io/surt/pkg/logger"
 	"github.com/surt-io/surt/pkg/repository"
 	"github.com/surt-io/surt/pkg/scan"
 )
@@ -66,7 +67,15 @@ func RunHealthz(port string) (err error) {
 
 func RunTaskRunner() (err error) {
 
-	repo := repository.NewScanDynamoDB("surt_scan")
+	// setup scan repository
+	repo := repository.NewScanRepo()
+	err = repo.SetupRepo(cfg.Config.Repository)
+	if err != nil {
+		log.Error().Err(err)
+		return
+	}
+
+	// setup scan service
 	svc := scan.NewService(repo)
 
 	// setup av engine
@@ -84,6 +93,13 @@ func RunTaskRunner() (err error) {
 	}
 
 	log.Info().Msgf("health check result for %s - %s: %s", cfg.Config.Antivirus.Engine, cfg.Config.Antivirus.Address, hc)
+
+	// fail if av engine is not healthy
+	if hc != "healthy" {
+		err = errors.New("av engine is not healthy")
+		log.Err(err)
+		return
+	}
 
 	//create new scan
 	log.Info().Msg("creating new scan task")

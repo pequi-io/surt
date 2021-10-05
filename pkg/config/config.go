@@ -15,9 +15,10 @@ type File struct {
 
 // Global config
 type Config struct {
-	API       API
-	Log       Log
-	Antivirus Antivirus
+	API        API
+	Log        Log
+	Antivirus  Antivirus
+	Repository Repository
 }
 
 // API config
@@ -35,6 +36,11 @@ type Antivirus struct {
 	Engine  string `default:"clamav"`
 	Address string `default:"127.0.0.1:3310"`
 	Network string `default:"tcp"`
+}
+
+type Repository struct {
+	Database string `default:"dynamodb"`
+	Region   string `default:""`
 }
 
 // Environment variable prefix

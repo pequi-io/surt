@@ -4,22 +4,22 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/surt-io/surt/pkg/antivirus/engine/fake"
-	"github.com/surt-io/surt/pkg/types"
+	"github.com/surt-io/surt/pkg/antivirus/engine/mockengine"
+	"github.com/surt-io/surt/pkg/entity"
 )
 
 var (
-	obj = types.Object{
+	obj = entity.Object{
 		Content: []byte("fake"),
 	}
-	emptyContent = types.Object{
+	emptyContent = entity.Object{
 		Content: make([]byte, 0, 1),
 	}
 )
 
 func TestNewAV(t *testing.T) {
 
-	avengine := fake.New()
+	avengine := mockengine.New()
 	av := New(avengine)
 
 	res, err := av.ScanObject(&obj)
@@ -34,11 +34,11 @@ func TestNewAV(t *testing.T) {
 
 func TestScanWithError(t *testing.T) {
 
-	avengine := fake.New()
+	avengine := mockengine.New()
 	av := New(avengine)
 
 	res, err := av.ScanObject(&emptyContent)
 	assert.NotNil(t, err)
-	assert.Equal(t, []types.Result(nil), res, "av scan result should be equal")
+	assert.Equal(t, []entity.Result(nil), res, "av scan result should be equal")
 
 }

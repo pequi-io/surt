@@ -2,6 +2,7 @@ package util
 
 import (
 	"crypto/sha256"
+	"encoding/hex"
 	"strings"
 )
 
@@ -53,5 +54,5 @@ func GetHash(c []byte) (hash string) {
 	if err != nil {
 		return hash
 	}
-	return ByteToString(h.Sum(nil))
+	return hex.EncodeToString(h.Sum(nil))
 }

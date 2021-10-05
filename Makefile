@@ -23,7 +23,7 @@ test:
 
 coverage:
 	@echo "> Running coverage tests..."
-	go test -coverpkg=./pkg/... -coverprofile=coverage.out ./pkg/...                                               \
+	go test -coverpkg=./pkg/... -coverprofile=coverage.out ./pkg/...
 
 build:
 	@echo "> Bulding all binaries..."

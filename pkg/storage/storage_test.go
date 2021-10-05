@@ -5,9 +5,9 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/surt-io/surt/internal/util"
-	"github.com/surt-io/surt/pkg/storage/services/fake"
-	"github.com/surt-io/surt/pkg/types"
+	"github.com/surt-io/surt/pkg/entity"
+	"github.com/surt-io/surt/pkg/storage/services/mockstorage"
+	"github.com/surt-io/surt/pkg/util"
 )
 
 var (
@@ -15,15 +15,15 @@ var (
 		"SURT_LAST_SCAN":   time.Now().String(),
 		"SURT_SCAN_STATUS": "CLEAN",
 	}
-	obj = types.Object{
+	obj = entity.Object{
 		RawFilePath: "/tmp/myobject.zip",
 		Tags:        objTags,
 	}
-	objWithoutPath = types.Object{
+	objWithoutPath = entity.Object{
 		RawFilePath: "",
 		Tags:        map[string]string{},
 	}
-	objToFail = types.Object{
+	objToFail = entity.Object{
 		RawFilePath: "fail",
 		Tags:        objTags,
 	}
@@ -31,7 +31,7 @@ var (
 
 func TestGetObject(t *testing.T) {
 
-	service := fake.New()
+	service := mockstorage.New()
 	s := New(service)
 
 	body, err := s.GetObject(&obj)
@@ -48,7 +48,7 @@ func TestGetObject(t *testing.T) {
 
 func TestGetObjectTags(t *testing.T) {
 
-	service := fake.New()
+	service := mockstorage.New()
 	s := New(service)
 
 	tags, err := s.GetObjectTags(&obj)
@@ -64,7 +64,7 @@ func TestGetObjectTags(t *testing.T) {
 
 func TestSetObjectTags(t *testing.T) {
 
-	service := fake.New()
+	service := mockstorage.New()
 	s := New(service)
 
 	err := s.SetObjectTags(&obj)

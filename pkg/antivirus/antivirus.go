@@ -3,7 +3,7 @@ package antivirus
 import (
 	"bytes"
 
-	"github.com/surt-io/surt/pkg/types"
+	"github.com/surt-io/surt/pkg/entity"
 )
 
 //Antivirus interface
@@ -19,7 +19,7 @@ func New(engine Engine) *Antivirus {
 }
 
 //Scan scans object content
-func (av *Antivirus) ScanObject(o *types.Object) (result []types.Result, err error) {
+func (av *Antivirus) ScanObject(o *entity.Object) (result []entity.Result, err error) {
 	r := bytes.NewReader(o.Content)
 	return av.engine.Scan(r)
 }

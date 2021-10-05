@@ -12,16 +12,15 @@ type AwsSession struct {
 	Config aws.Config
 }
 
-func (s *AwsSession) NewSession() (string, error) {
+func NewSession(region string) (AwsSession, error) {
+	s := AwsSession{
+		Region: region,
+	}
 	cfg, err := config.LoadDefaultConfig(context.TODO(),
 		config.WithRegion(s.Region))
 	if err != nil {
-		return "", err
+		return s, err
 	}
 	s.Config = cfg
-	return "ok", nil
-}
-
-func (s *AwsSession) GetConfig() aws.Config {
-	return s.Config
+	return s, nil
 }

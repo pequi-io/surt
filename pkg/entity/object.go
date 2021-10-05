@@ -1,4 +1,4 @@
-package types
+package entity
 
 import (
 	"strings"
@@ -39,7 +39,7 @@ func (o *Object) Validate() error {
 	if o.RawFilePath == "" {
 		return ErrEmptyRawFilePath
 	}
-	//ToDo: Add regex to validate rawFilePath string with SOK standard
+	//To-Do: Add regex to validate rawFilePath string with SOK standard
 	return nil
 }
 

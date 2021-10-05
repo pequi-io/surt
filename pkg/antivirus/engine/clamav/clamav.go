@@ -6,7 +6,7 @@ import (
 	"io"
 
 	"github.com/baruwa-enterprise/clamd"
-	"github.com/surt-io/surt/pkg/types"
+	"github.com/surt-io/surt/pkg/entity"
 )
 
 type engine struct {
@@ -26,7 +26,7 @@ func New(network string, address string) (e *engine, err error) {
 	return
 }
 
-func (e *engine) Scan(i io.Reader) (result []types.Result, err error) {
+func (e *engine) Scan(i io.Reader) (result []entity.Result, err error) {
 
 	response, err := e.client.ScanReader(context.TODO(), i)
 
@@ -39,7 +39,7 @@ func (e *engine) Scan(i io.Reader) (result []types.Result, err error) {
 	}
 
 	for _, res := range response {
-		r := types.Result{}
+		r := entity.Result{}
 		r.FileName = res.Filename
 		r.Status = res.Status
 		r.Signature = res.Signature

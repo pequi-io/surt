@@ -4,7 +4,7 @@ import (
 	"os"
 
 	"github.com/rs/zerolog"
-	"github.com/surt-io/surt/internal/config"
+	"github.com/surt-io/surt/pkg/config"
 )
 
 // create cfg config.File type
