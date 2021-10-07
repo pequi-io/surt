@@ -1,20 +1,28 @@
 package app
 
 import (
-	"github.com/surt-io/surt/pkg/antivirus"
-	"github.com/surt-io/surt/pkg/antivirus/engine/clamav"
-	"github.com/surt-io/surt/pkg/object"
-	"github.com/surt-io/surt/pkg/util/config"
-	"github.com/surt-io/surt/pkg/util/logger"
+	"errors"
+	"sync"
+
+	"github.com/surt-io/surt/pkg/config"
+	"github.com/surt-io/surt/pkg/healthz"
+	"github.com/surt-io/surt/pkg/logger"
+	"github.com/surt-io/surt/pkg/repository"
+	"github.com/surt-io/surt/pkg/scan"
 )
 
-func RunApp() {
+// define log with new logger
+var log = logger.New()
 
-	// define log with new logger default
-	log := logger.NewDefault()
+// create cfg config.File type
+var cfg *config.File
+
+func init() {
+
+	var err error
 
 	// create cfg with default values
-	cfg, err := config.Default()
+	cfg, err = config.Default()
 	if err != nil {
 		log.Error().Err(err)
 	}
@@ -25,42 +33,100 @@ func RunApp() {
 		log.Error().Err(err)
 	}
 
-	// update logger with global log config values
-	log = logger.New(cfg.Config.Log.Debug, cfg.Config.Log.Debug)
+}
 
-	// declare empty antivirus struct
-	var av antivirus.Antivirus
+func RunApp() {
 
-	// load antivirus engine
-	switch cfg.Config.Antivirus.Engine {
-	case "clamav":
-		engine, err := clamav.New(cfg.Config.Antivirus.Network, cfg.Config.Antivirus.Address)
-		if err != nil {
-			log.Error().Err(err)
-		}
-		av = *antivirus.New(engine)
+	wg := new(sync.WaitGroup)
+	wg.Add(1)
 
-	default:
-		log.Error().Msgf("antivirus %s engine is not supported", cfg.Config.Antivirus.Engine)
+	go func() {
+		RunTaskRunner()
+		wg.Done()
+	}()
+
+	go func(p string) {
+		RunHealthz(p)
+		wg.Done()
+	}(cfg.Config.API.Port)
+
+	wg.Wait()
+}
+
+func RunHealthz(port string) (err error) {
+	h := healthz.New()
+	log.Info().Msg("starting healthcheck...")
+	err = h.Run(":" + port)
+
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func RunTaskRunner() (err error) {
+
+	// setup scan repository
+	repo := repository.NewScanRepo()
+	err = repo.SetupRepo(cfg.Config.Repository)
+	if err != nil {
+		log.Error().Err(err)
+		return
+	}
+
+	// setup scan service
+	svc := scan.NewService(repo)
+
+	// setup av engine
+	err = svc.SetupEngine(cfg.Config.Antivirus)
+	if err != nil {
+		log.Error().Err(err)
+		return
 	}
 
 	// test check av engine health status
-	hc, err := av.GetHealthStatus()
+	hc, err := svc.HealthCheck()
 	if err != nil {
 		log.Error().Err(err)
+		return
 	}
 
 	log.Info().Msgf("health check result for %s - %s: %s", cfg.Config.Antivirus.Engine, cfg.Config.Antivirus.Address, hc)
 
-	// test antivirus scan
-	var obj object.Object
-	eicarSrt := "X5O!P%@AP[4\\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*"
-	obj.Content = []byte(eicarSrt)
-
-	r, err := av.Scan(&obj)
-	if err != nil {
-		log.Error().Err(err)
+	// fail if av engine is not healthy
+	if hc != "healthy" {
+		err = errors.New("av engine is not healthy")
+		log.Err(err)
+		return
 	}
 
-	log.Info().Msgf("scan result of test eicar string: %s", r)
+	//create new scan
+	log.Info().Msg("creating new scan task")
+	scanId, err := svc.CreateScan("s3://mybucket/eicar.zip")
+	if err != nil {
+		log.Err(err)
+		return
+	}
+
+	log.Info().Msgf("New ScanID: %v", scanId)
+
+	s, err := svc.GetScan(scanId)
+	if err != nil {
+		log.Err(err)
+		return
+	}
+
+	log.Info().Msgf("Get Scan: %v", s)
+
+	log.Info().Msg("Execute scan")
+	err = svc.ExecuteScan(s)
+	if err != nil {
+		log.Err(err)
+		return
+	}
+
+	log.Info().Msgf("Object infected: %v", s.Infected)
+
+	return nil
 }

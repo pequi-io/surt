@@ -1,8 +1,10 @@
-package fake
+package mockstorage
 
 import (
 	"fmt"
 	"time"
+
+	"github.com/surt-io/surt/pkg/entity"
 )
 
 type service struct {
@@ -15,14 +17,14 @@ func New() *service {
 	}
 }
 
-func (s *service) GetObject(path string) (body []byte, err error) {
+func (s *service) GetObject(path string) (content []byte, err error) {
 	if path == "fail" {
-		return body, fmt.Errorf("error to get fake object content/body")
+		return content, fmt.Errorf("error to get fake object content")
 	}
 	return []byte("fake"), nil
 }
 
-func (s *service) GetObjectTags(path string) (tags map[string]string, err error) {
+func (s *service) GetObjectTags(path string) (tags entity.Tags, err error) {
 
 	if path == "fail" {
 		return tags, fmt.Errorf("error to get fake object tags")
@@ -34,7 +36,7 @@ func (s *service) GetObjectTags(path string) (tags map[string]string, err error)
 	}, nil
 }
 
-func (s *service) SetObjectTags(path string, tags map[string]string) (err error) {
+func (s *service) SetObjectTags(path string, tags entity.Tags) (err error) {
 	if path == "fail" {
 		return fmt.Errorf("error to get fake object tags")
 	}

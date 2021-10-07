@@ -7,12 +7,20 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestDefaultLogger(t *testing.T) {
-	log := New(false, false)
+func TestNewLogger(t *testing.T) {
+	log := New()
 	assert.Equal(t, zerolog.LevelInfoValue, log.GetLevel().String(), "log level should be equal")
 }
 
+func TestNewDefaultLogger(t *testing.T) {
+	log := NewDefault()
+	assert.Equal(t, zerolog.LevelDebugValue, log.GetLevel().String(), "log level should be equal")
+}
+
 func TestDebugLogger(t *testing.T) {
-	log := New(true, false)
+	// set log config debug to true
+	cfg.Config.Log.Debug = true
+
+	log := New()
 	assert.Equal(t, zerolog.LevelDebugValue, log.GetLevel().String(), "log level should be equal")
 }

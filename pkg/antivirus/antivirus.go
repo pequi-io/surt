@@ -2,41 +2,29 @@ package antivirus
 
 import (
 	"bytes"
-	"fmt"
-	"io"
 
-	"github.com/surt-io/surt/pkg/object"
-	"github.com/surt-io/surt/pkg/util/helper"
+	"github.com/surt-io/surt/pkg/entity"
 )
 
-type Engine interface {
-	Scan(io.Reader) (result string, err error)
-	GetHealthStatus() (response string, err error)
-}
-
+//Antivirus interface
 type Antivirus struct {
 	engine Engine
 }
 
+//New creates new Antivirus
 func New(engine Engine) *Antivirus {
 	return &Antivirus{
 		engine: engine,
 	}
 }
 
-func (av *Antivirus) Scan(o *object.Object) (result string, err error) {
+//Scan scans object content
+func (av *Antivirus) ScanObject(o *entity.Object) (result []entity.Result, err error) {
 	r := bytes.NewReader(o.Content)
-	res, err := av.engine.Scan(r)
-	if err != nil {
-		return "", fmt.Errorf("Scan: %w", err)
-	}
-	return helper.ParseScanStatus(res), nil
+	return av.engine.Scan(r)
 }
 
+//GetHealthStatus returns healthcheck status from Antivirus Engine
 func (av *Antivirus) GetHealthStatus() (response string, err error) {
-	res, err := av.engine.GetHealthStatus()
-	if err != nil {
-		return res, fmt.Errorf("HealthCheck: %v", err)
-	}
-	return res, nil
+	return av.engine.HealthStatus()
 }

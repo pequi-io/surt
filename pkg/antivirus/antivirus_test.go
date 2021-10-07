@@ -4,29 +4,27 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/surt-io/surt/pkg/antivirus/engine/fake"
-	"github.com/surt-io/surt/pkg/object"
+	"github.com/surt-io/surt/pkg/antivirus/engine/mockengine"
+	"github.com/surt-io/surt/pkg/entity"
 )
 
 var (
-	obj = object.Object{
-		Name:    "fakeobj",
+	obj = entity.Object{
 		Content: []byte("fake"),
 	}
-	emptyContent = object.Object{
-		Name:    "emptyobj",
+	emptyContent = entity.Object{
 		Content: make([]byte, 0, 1),
 	}
 )
 
 func TestNewAV(t *testing.T) {
 
-	avengine := fake.New()
+	avengine := mockengine.New()
 	av := New(avengine)
 
-	res, err := av.Scan(&obj)
+	res, err := av.ScanObject(&obj)
 	assert.Nil(t, err)
-	assert.Equal(t, "CLEAN", res, "av scan result should be equal")
+	assert.Equal(t, "CLEAN", res[0].Status, "av scan result should be equal")
 
 	h, err := av.GetHealthStatus()
 	assert.Nil(t, err)
@@ -36,11 +34,11 @@ func TestNewAV(t *testing.T) {
 
 func TestScanWithError(t *testing.T) {
 
-	avengine := fake.New()
+	avengine := mockengine.New()
 	av := New(avengine)
 
-	res, err := av.Scan(&emptyContent)
+	res, err := av.ScanObject(&emptyContent)
 	assert.NotNil(t, err)
-	assert.Equal(t, "", res, "av scan result should be equal")
+	assert.Equal(t, []entity.Result(nil), res, "av scan result should be equal")
 
 }

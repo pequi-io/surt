@@ -5,9 +5,9 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/surt-io/surt/pkg/object"
-	"github.com/surt-io/surt/pkg/storage/services/fake"
-	"github.com/surt-io/surt/pkg/util/helper"
+	"github.com/surt-io/surt/pkg/entity"
+	"github.com/surt-io/surt/pkg/storage/services/mockstorage"
+	"github.com/surt-io/surt/pkg/util"
 )
 
 var (
@@ -15,30 +15,28 @@ var (
 		"SURT_LAST_SCAN":   time.Now().String(),
 		"SURT_SCAN_STATUS": "CLEAN",
 	}
-	obj = object.Object{
-		Path: "/tmp/myobject.zip",
-		Tags: objTags,
+	obj = entity.Object{
+		RawFilePath: "/tmp/myobject.zip",
+		Tags:        objTags,
 	}
-	objWithoutPath = object.Object{
-		Name: "empty path",
-		Path: "",
-		Tags: map[string]string{},
+	objWithoutPath = entity.Object{
+		RawFilePath: "",
+		Tags:        map[string]string{},
 	}
-	// fake storage service returns error when path value is "fail".
-	objToFail = object.Object{
-		Path: "fail",
-		Tags: objTags,
+	objToFail = entity.Object{
+		RawFilePath: "fail",
+		Tags:        objTags,
 	}
 )
 
 func TestGetObject(t *testing.T) {
 
-	service := fake.New()
+	service := mockstorage.New()
 	s := New(service)
 
 	body, err := s.GetObject(&obj)
 	assert.Nil(t, err)
-	assert.Equal(t, "fake", helper.ByteToString(body), "object content/body should be equal")
+	assert.Equal(t, "fake", util.ByteToString(body), "object content/body should be equal")
 
 	_, err = s.GetObject(&objWithoutPath)
 	assert.NotNil(t, err)
@@ -50,7 +48,7 @@ func TestGetObject(t *testing.T) {
 
 func TestGetObjectTags(t *testing.T) {
 
-	service := fake.New()
+	service := mockstorage.New()
 	s := New(service)
 
 	tags, err := s.GetObjectTags(&obj)
@@ -66,7 +64,7 @@ func TestGetObjectTags(t *testing.T) {
 
 func TestSetObjectTags(t *testing.T) {
 
-	service := fake.New()
+	service := mockstorage.New()
 	s := New(service)
 
 	err := s.SetObjectTags(&obj)
