@@ -47,6 +47,8 @@ github.com/aws/aws-sdk-go-v2 v1.9.0 h1:+S+dSqQCN3MSU5vJRu1HqHrq00cJn6heIMU7X9hcs
 github.com/aws/aws-sdk-go-v2 v1.9.0/go.mod h1:cK/D0BBs0b/oWPIcX/Z/obahJK1TT7IPVjy53i/mX/4=
 github.com/aws/aws-sdk-go-v2 v1.9.1 h1:ZbovGV/qo40nrOJ4q8G33AGICzaPI45FHQWJ9650pF4=
 github.com/aws/aws-sdk-go-v2 v1.9.1/go.mod h1:cK/D0BBs0b/oWPIcX/Z/obahJK1TT7IPVjy53i/mX/4=
+github.com/aws/aws-sdk-go-v2 v1.9.2 h1:dUFQcMNZMLON4BOe273pl0filK9RqyQMhCK/6xssL6s=
+github.com/aws/aws-sdk-go-v2 v1.9.2/go.mod h1:cK/D0BBs0b/oWPIcX/Z/obahJK1TT7IPVjy53i/mX/4=
 github.com/aws/aws-sdk-go-v2/config v1.7.0 h1:J2cZ7qe+3IpqBEXnHUrFrOjoB9BlsXg7j53vxcl5IVg=
 github.com/aws/aws-sdk-go-v2/config v1.7.0/go.mod h1:w9+nMZ7soXCe5nT46Ri354SNhXDQ6v+V5wqDjnZE+GY=
 github.com/aws/aws-sdk-go-v2/credentials v1.4.0 h1:kmvesfjY861FzlCU9mvAfe01D9aeXcG2ZuC+k9F2YLM=
@@ -65,6 +67,12 @@ github.com/aws/aws-sdk-go-v2/service/internal/endpoint-discovery v1.1.1 h1:MzX4O
 github.com/aws/aws-sdk-go-v2/service/internal/endpoint-discovery v1.1.1/go.mod h1:CStcbRap+CGgI5IYfxM7DI9HSUTQX9jeGzav433hJ9M=
 github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.3.0 h1:VNJ5NLBteVXEwE2F1zEXVmyIH58mZ6kIQGJoC7C+vkg=
 github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.3.0/go.mod h1:R1KK+vY8AfalhG1AOu5e35pOD2SdoPKQCFLTvnxiohk=
+github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.3.2 h1:r7jel2aa4d9Duys7wEmWqDd5ebpC9w6Kxu6wIjjp18E=
+github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.3.2/go.mod h1:72HRZDLMtmVQiLG2tLfQcaWLCssELvGl+Zf2WVxMmR8=
+github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.7.2 h1:RnZjLgtCGLsF2xYYksy0yrx6xPvKG9BYv29VfK4p/J8=
+github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.7.2/go.mod h1:np7TMuJNT83O0oDOSF8i4dF3dvGqA6hPYYo6YYkzgRA=
+github.com/aws/aws-sdk-go-v2/service/s3 v1.16.1 h1:z+P3r4LrwdudLKBoEVWxIORrk4sVg4/iqpG3+CS53AY=
+github.com/aws/aws-sdk-go-v2/service/s3 v1.16.1/go.mod h1:CQe/KvWV1AqRc65KqeJjrLzr5X2ijnFTTVzJW0VBRCI=
 github.com/aws/aws-sdk-go-v2/service/sso v1.4.0 h1:sHXMIKYS6YiLPzmKSvDpPmOpJDHxmAUgbiF49YNVztg=
 github.com/aws/aws-sdk-go-v2/service/sso v1.4.0/go.mod h1:+1fpWnL96DL23aXPpMGbsmKe8jLTEfbjuQoA4WS1VaA=
 github.com/aws/aws-sdk-go-v2/service/sts v1.7.0 h1:1at4e5P+lvHNl2nUktdM2/v+rpICg/QSEr9TO/uW9vU=

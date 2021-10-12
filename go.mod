@@ -3,9 +3,10 @@ module github.com/surt-io/surt
 go 1.16
 
 require (
-	github.com/aws/aws-sdk-go-v2 v1.9.1
+	github.com/aws/aws-sdk-go-v2 v1.9.2
 	github.com/aws/aws-sdk-go-v2/config v1.7.0
 	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.5.1 // indirect
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.16.1 // indirect
 	github.com/baruwa-enterprise/clamd v1.0.1
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/gin-gonic/gin v1.7.4
