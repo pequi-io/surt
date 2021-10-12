@@ -5,7 +5,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
-	"github.com/surt-io/surt/pkg/util/logger"
+	"github.com/surt-io/surt/pkg/logger"
 )
 
 type AwsSession struct {
