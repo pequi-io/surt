@@ -24,8 +24,9 @@ type S3PutObjectTagging interface {
 	PutObjectTagging(ctx context.Context, input *s3.PutObjectTaggingInput, optFns ...func(*s3.Options)) (*s3.PutObjectTaggingOutput, error)
 }
 
+var log = logger.New()
+
 func New() *s3.Client {
-	log := logger.NewDefault()
 
 	sess := aws.AwsSession{}
 
@@ -40,8 +41,6 @@ func New() *s3.Client {
 }
 
 func GetObjectBody(ctx context.Context, api S3GetObject, bucket, path string) (body []byte, err error) {
-
-	log := logger.NewDefault()
 
 	obj, err := api.GetObject(ctx, &s3.GetObjectInput{
 		Bucket: &bucket,
@@ -67,8 +66,6 @@ func GetObjectBody(ctx context.Context, api S3GetObject, bucket, path string) (b
 }
 
 func GetObjectTags(ctx context.Context, api S3GetObjectTagging, bucket, path string) (tags map[string]string, err error) {
-
-	log := logger.NewDefault()
 
 	m := make(map[string]string)
 
@@ -96,8 +93,6 @@ func GetObjectTags(ctx context.Context, api S3GetObjectTagging, bucket, path str
 }
 
 func PutObjectTags(ctx context.Context, api S3PutObjectTagging, bucket, path, lastScan, scanStatus string) {
-
-	log := logger.NewDefault()
 
 	_, err := api.PutObjectTagging(ctx, &s3.PutObjectTaggingInput{
 		Bucket: &bucket,
