@@ -22,9 +22,9 @@ func NewScanRepo(region string) (scan.Repository, error) {
 		table: "surt_scan",
 	}
 
-	sess, err := aws.AwsSession{}
-	session, err := aws.NewSession(region)
+	session := aws.AwsSession{Region: region}
 
+	_, err := session.NewSession()
 	if err != nil {
 		log.Err(err)
 		return &s, err
