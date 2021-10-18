@@ -1,7 +1,3 @@
-api_cmd = surt-api
-controller_cmd = surt-controller
-runner_cmd = surt-task-runner
-
 install:
 	@echo "> Installing all required tools..."
 	@go install honnef.co/go/tools/cmd/staticcheck@latest

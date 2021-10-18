@@ -12,16 +12,6 @@ builds:
     goarch:
       - amd64
       - arm64
-  - id: surt-controller
-    binary: surt-controller
-    main: ./cmd/surt-controller
-    env:
-      - CGO_ENABLED=0
-    goos:
-      - linux
-    goarch:
-      - amd64
-      - arm64
   - id: surt-task-runner
     binary: surt-task-runner
     main: ./cmd/surt-task-runner
