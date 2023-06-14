@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/surt-io/surt/pkg/entity"
+	"github.com/pequi-io/surt/pkg/entity"
 )
 
 type engine struct {

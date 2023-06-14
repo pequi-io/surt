@@ -4,10 +4,10 @@ import (
 	"testing"
 	"time"
 
+	"github.com/pequi-io/surt/pkg/entity"
+	"github.com/pequi-io/surt/pkg/storage/services/mockstorage"
+	"github.com/pequi-io/surt/pkg/util"
 	"github.com/stretchr/testify/assert"
-	"github.com/surt-io/surt/pkg/entity"
-	"github.com/surt-io/surt/pkg/storage/services/mockstorage"
-	"github.com/surt-io/surt/pkg/util"
 )
 
 var (

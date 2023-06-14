@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/surt-io/surt/pkg/antivirus"
-	"github.com/surt-io/surt/pkg/antivirus/engine/clamav"
-	"github.com/surt-io/surt/pkg/config"
-	"github.com/surt-io/surt/pkg/entity"
-	"github.com/surt-io/surt/pkg/util"
+	"github.com/pequi-io/surt/pkg/antivirus"
+	"github.com/pequi-io/surt/pkg/antivirus/engine/clamav"
+	"github.com/pequi-io/surt/pkg/config"
+	"github.com/pequi-io/surt/pkg/entity"
+	"github.com/pequi-io/surt/pkg/util"
 )
 
 type Service struct {

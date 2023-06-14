@@ -3,22 +3,22 @@ package storage
 import (
 	"fmt"
 
-	"github.com/surt-io/surt/pkg/entity"
+	"github.com/pequi-io/surt/pkg/entity"
 )
 
-//Storage interface
+// Storage interface
 type storage struct {
 	provider StorageService
 }
 
-//New storage
+// New storage
 func New(provider StorageService) *storage {
 	return &storage{
 		provider: provider,
 	}
 }
 
-//GetObject returns storage service object content
+// GetObject returns storage service object content
 func (s *storage) GetObject(o *entity.Object) (b []byte, err error) {
 
 	// Validate if RawFilePath is empty
@@ -34,7 +34,7 @@ func (s *storage) GetObject(o *entity.Object) (b []byte, err error) {
 	return b, nil
 }
 
-//GetObjectTags returns SURT tags from storage service object
+// GetObjectTags returns SURT tags from storage service object
 func (s *storage) GetObjectTags(o *entity.Object) (entity.Tags, error) {
 
 	t := entity.Tags{}
@@ -50,7 +50,7 @@ func (s *storage) GetObjectTags(o *entity.Object) (entity.Tags, error) {
 	return t, nil
 }
 
-//SetObjectTags sets SURT tags to storage service object
+// SetObjectTags sets SURT tags to storage service object
 func (s *storage) SetObjectTags(o *entity.Object) error {
 
 	if o.RawFilePath == "" {

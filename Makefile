@@ -8,7 +8,7 @@ mods:
 	@echo "> Downloading all required go modules..."
 	@go mod download
 
-verify: 
+verify:
 	@go mod verify
 
 lint:
@@ -27,7 +27,7 @@ build:
 
 clamav-start:
 	@echo "> Starting local clamav using docker..."
-	docker run -d -p 3310:3310 --rm --name clamav ghcr.io/surt-io/container-clamav:latest-initdb
+	docker run -d -p 3310:3310 --rm --name clamav ghcr.io/pequi-io/container-clamav:latest-initdb
 
 clamav-stop:
 	@echo "> Stopping local clamav..."

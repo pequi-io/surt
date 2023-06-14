@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/surt-io/surt/pkg/entity"
+	"github.com/pequi-io/surt/pkg/entity"
 )
 
 type service struct {

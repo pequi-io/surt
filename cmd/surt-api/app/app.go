@@ -1,9 +1,9 @@
 package app
 
 import (
-	"github.com/surt-io/surt/pkg/api"
-	"github.com/surt-io/surt/pkg/config"
-	"github.com/surt-io/surt/pkg/logger"
+	"github.com/pequi-io/surt/pkg/api"
+	"github.com/pequi-io/surt/pkg/config"
+	"github.com/pequi-io/surt/pkg/logger"
 )
 
 // define log with new logger

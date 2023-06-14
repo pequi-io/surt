@@ -4,11 +4,11 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/surt-io/surt/pkg/config"
-	"github.com/surt-io/surt/pkg/healthz"
-	"github.com/surt-io/surt/pkg/logger"
-	"github.com/surt-io/surt/pkg/repository"
-	"github.com/surt-io/surt/pkg/scan"
+	"github.com/pequi-io/surt/pkg/config"
+	"github.com/pequi-io/surt/pkg/healthz"
+	"github.com/pequi-io/surt/pkg/logger"
+	"github.com/pequi-io/surt/pkg/repository"
+	"github.com/pequi-io/surt/pkg/scan"
 )
 
 // define log with new logger

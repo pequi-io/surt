@@ -2,10 +2,10 @@ package dynamodb
 
 import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
-	"github.com/surt-io/surt/pkg/cloudproviders/aws"
-	"github.com/surt-io/surt/pkg/entity"
-	"github.com/surt-io/surt/pkg/logger"
-	"github.com/surt-io/surt/pkg/scan"
+	"github.com/pequi-io/surt/pkg/cloudproviders/aws"
+	"github.com/pequi-io/surt/pkg/entity"
+	"github.com/pequi-io/surt/pkg/logger"
+	"github.com/pequi-io/surt/pkg/scan"
 )
 
 // define log with new logger
