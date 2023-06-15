@@ -3,9 +3,9 @@ package antivirus
 import (
 	"testing"
 
+	"github.com/pequi-io/surt/pkg/antivirus/engine/mockengine"
+	"github.com/pequi-io/surt/pkg/entity"
 	"github.com/stretchr/testify/assert"
-	"github.com/surt-io/surt/pkg/antivirus/engine/mockengine"
-	"github.com/surt-io/surt/pkg/entity"
 )
 
 var (

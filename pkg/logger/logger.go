@@ -3,8 +3,8 @@ package logger
 import (
 	"os"
 
+	"github.com/pequi-io/surt/pkg/config"
 	"github.com/rs/zerolog"
-	"github.com/surt-io/surt/pkg/config"
 )
 
 // create cfg config.File type

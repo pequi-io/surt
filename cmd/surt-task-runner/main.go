@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/surt-io/surt/cmd/surt-task-runner/app"
+	"github.com/pequi-io/surt/cmd/surt-task-runner/app"
 )
 
 func main() {
