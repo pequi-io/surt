@@ -8,8 +8,8 @@ import (
 	awshelper "github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/s3/types"
-	"github.com/surt-io/surt/pkg/cloudproviders/aws"
-	"github.com/surt-io/surt/pkg/logger"
+	"github.com/pequi-io/surt/pkg/cloudproviders/aws"
+	"github.com/pequi-io/surt/pkg/logger"
 )
 
 type S3GetObject interface {
