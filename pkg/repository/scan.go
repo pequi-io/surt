@@ -3,9 +3,9 @@ package repository
 import (
 	"fmt"
 
-	"github.com/surt-io/surt/pkg/config"
-	"github.com/surt-io/surt/pkg/entity"
-	"github.com/surt-io/surt/pkg/repository/dynamodb"
+	"github.com/pequi-io/surt/pkg/config"
+	"github.com/pequi-io/surt/pkg/entity"
+	"github.com/pequi-io/surt/pkg/repository/dynamodb"
 )
 
 type scanDB interface {

@@ -1,6 +1,6 @@
 package scan
 
-import "github.com/surt-io/surt/pkg/entity"
+import "github.com/pequi-io/surt/pkg/entity"
 
 type Repository interface {
 	Create(s *entity.Scan) (entity.ID, error)
